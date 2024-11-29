@@ -1,0 +1,4 @@
+numero_de_pila,initial_voltage,slope_initial,area_curve,time_to_1_4v,max_voltage
+1,0.33,-2.7151441231682794e-18,16.5,0,0.33
+2,1.36,-2.078292643458083e-17,68.0,0,1.36
+3,1.38,-3.034279574612087e-17,69.0,0,1.38

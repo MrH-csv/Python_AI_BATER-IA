@@ -1,0 +1,4 @@
+initial_voltage,slope_initial,area_curve,time_to_1_4v,max_voltage,pila_id,predicted_battery_type
+0.33,-2.7151441231682797e-18,16.5,0,0.33,Pila 1,Carbon-Zinc (Zn-MnO2)
+1.36,-2.078292643458083e-17,68.0,0,1.36,Pila 2,Carbon-Zinc (Zn-MnO2)
+1.38,-3.034279574612087e-17,69.0,0,1.38,Pila 3,Carbon-Zinc (Zn-MnO2)
