@@ -26,29 +26,28 @@ def ejecutar_todos_los_scripts():
             try:
                 # Verificar si el archivo del script existe
                 if not os.path.exists(script_name):
-                    monitor_text.insert(tk.END, f"Error: El archivo {script_name} no existe.\n")
+                    monitor_text.insert(tk.END, "Error: El archivo {} no existe.\n".format(script_name))
                     monitor_text.see(tk.END)
-                    messagebox.showerror("Error", f"El archivo {script_name} no existe.")
+                    messagebox.showerror("Error", "El archivo {} no existe.".format(script_name))
                     return
 
                 # Mostrar mensaje inicial
-                monitor_text.insert(tk.END, f"Ejecutando {script_name} (estimado {est_time} segundos)...\n")
+                monitor_text.insert(tk.END, "Ejecutando {} (estimado {} segundos)...\n".format(script_name, est_time))
                 monitor_text.see(tk.END)
 
                 # Ejecutar el script y capturar salida en tiempo real
                 process = subprocess.Popen(
                     ["python", script_name],
                     stdout=subprocess.PIPE,
-                    stderr=subprocess.PIPE,
-                    text=True
+                    stderr=subprocess.PIPE
                 )
 
                 start_time = time.time()
                 elapsed_time = 0
                 while process.poll() is None:  # Mientras el proceso esté activo
-                    line = process.stdout.readline()
-                    if line:
-                        monitor_text.insert(tk.END, line)
+                    output_line = process.stdout.readline()
+                    if output_line:
+                        monitor_text.insert(tk.END, output_line.decode("utf-8"))
                         monitor_text.see(tk.END)
 
                     elapsed_time = time.time() - start_time
@@ -58,7 +57,7 @@ def ejecutar_todos_los_scripts():
 
                 # Leer errores después de finalizar
                 for line in process.stderr.readlines():
-                    monitor_text.insert(tk.END, f"Error: {line}")
+                    monitor_text.insert(tk.END, "Error: {}".format(line.decode("utf-8")))
                     monitor_text.see(tk.END)
 
                 process.stdout.close()
@@ -67,18 +66,18 @@ def ejecutar_todos_los_scripts():
 
                 # Verificar el estado final del proceso
                 if process.returncode == 0:
-                    monitor_text.insert(tk.END, f"{script_name} ejecutado correctamente.\n")
+                    monitor_text.insert(tk.END, "{} ejecutado correctamente.\n".format(script_name))
                     monitor_text.see(tk.END)
                 else:
-                    monitor_text.insert(tk.END, f"Error: {script_name} terminó con errores.\n")
+                    monitor_text.insert(tk.END, "Error: {} terminó con errores.\n".format(script_name))
                     monitor_text.see(tk.END)
-                    messagebox.showerror("Error", f"{script_name} terminó con errores.")
+                    messagebox.showerror("Error", "{} terminó con errores.".format(script_name))
                     return
             except Exception as e:
                 # Reportar cualquier error inesperado
-                monitor_text.insert(tk.END, f"Error inesperado en {script_name}: {e}\n")
+                monitor_text.insert(tk.END, "Error inesperado en {}: {}\n".format(script_name, e))
                 monitor_text.see(tk.END)
-                messagebox.showerror("Error", f"Error inesperado en {script_name}: {e}")
+                messagebox.showerror("Error", "Error inesperado en {}: {}".format(script_name, e))
                 return
 
             # Actualizar la barra de progreso para el siguiente script
@@ -92,7 +91,9 @@ def ejecutar_todos_los_scripts():
         monitor_text.see(tk.END)
 
     # Ejecutar en un hilo separado para no bloquear la interfaz
-    threading.Thread(target=run_all_scripts, daemon=True).start()
+    thread = threading.Thread(target=run_all_scripts)
+    thread.daemon = True
+    thread.start()
 
 # Pantalla del proceso de reciclaje con la funcionalidad de ejecutar scripts
 def show_recycling_screen():
