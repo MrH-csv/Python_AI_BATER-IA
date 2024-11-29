@@ -28,8 +28,10 @@ def ejecutar_todos_los_scripts():
                 if not os.path.exists(script_name):
                     monitor_text.insert(tk.END, "Error: El archivo {} no existe.\n".format(script_name))
                     monitor_text.see(tk.END)
-                    messagebox.showerror("Error", "El archivo {} no existe.".format(script_name))
-                    return
+                    messagebox.showwarning("Advertencia", "El archivo {} no existe. Continuando con el siguiente script.".format(script_name))
+                    progress_bar["value"] += progress_step
+                    root.update_idletasks()
+                    continue  # Continuar con el siguiente script
 
                 # Mostrar mensaje inicial
                 monitor_text.insert(tk.END, "Ejecutando {} (estimado {} segundos)...\n".format(script_name, est_time))
@@ -71,14 +73,19 @@ def ejecutar_todos_los_scripts():
                 else:
                     monitor_text.insert(tk.END, "Error: {} terminó con errores.\n".format(script_name))
                     monitor_text.see(tk.END)
-                    messagebox.showerror("Error", "{} terminó con errores.".format(script_name))
-                    return
+                    messagebox.showwarning("Advertencia", "{} terminó con errores. Continuando con el siguiente script.".format(script_name))
+                    progress_bar["value"] += progress_step
+                    root.update_idletasks()
+                    continue  # Continuar con el siguiente script
+
             except Exception as e:
                 # Reportar cualquier error inesperado
                 monitor_text.insert(tk.END, "Error inesperado en {}: {}\n".format(script_name, e))
                 monitor_text.see(tk.END)
-                messagebox.showerror("Error", "Error inesperado en {}: {}".format(script_name, e))
-                return
+                messagebox.showerror("Error inesperado", "Error inesperado en {}: {}".format(script_name, e))
+                progress_bar["value"] += progress_step
+                root.update_idletasks()
+                continue  # Continuar con el siguiente script
 
             # Actualizar la barra de progreso para el siguiente script
             progress_bar["value"] += progress_step

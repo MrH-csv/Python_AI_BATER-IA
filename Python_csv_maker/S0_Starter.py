@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import serial  # Biblioteca para comunicación serial
 import time    # Biblioteca para manejar tiempos de espera
 
